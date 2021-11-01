@@ -11,4 +11,4 @@
 + /signup : sign up form.
 
 + /users/{id} : this end point will display the user of that id information.
-+ /home : you can see it after logging in.
++ /home : you can see it after logging in....
