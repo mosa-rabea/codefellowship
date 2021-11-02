@@ -1,8 +1,9 @@
 package com.example.codefellowship.Security;
 
 
-import com.example.codefellowship.model.ApplicationUser;
-import com.example.codefellowship.repository.ApplicationUserRepository;
+import com.example.codefellowship.model.ApplicationUserModel;
+import com.example.codefellowship.model.UserDataModel;
+import com.example.codefellowship.repository.DbUserDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,17 +15,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     // Dependency Injection & IoC
     @Autowired
-    ApplicationUserRepository applicationUserRepository;
+    DbUserDataRepository dbUserDataRepository;
 
     // Polymorphism
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ApplicationUser applicationUser = applicationUserRepository.findByUsername(username);
-
+        UserDataModel applicationUser1 = dbUserDataRepository.findByUsername(username);
+        ApplicationUserModel applicationUserModel = new ApplicationUserModel(applicationUser1);
         // Error handling ... the user is equal to null (doesn't exist in the database)
-        if(applicationUser == null){
+        if(applicationUser1 == null){
             throw  new UsernameNotFoundException("The user "+ username + " does not exist");
         }
-        return applicationUser;
+        return applicationUserModel;
     }
 }
