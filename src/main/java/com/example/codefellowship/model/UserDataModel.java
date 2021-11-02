@@ -1,14 +1,11 @@
 package com.example.codefellowship.model;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.Date;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 @Entity
-public class ApplicationUser implements UserDetails {
+public class UserDataModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -20,11 +17,25 @@ public class ApplicationUser implements UserDetails {
     private String dateOfBirth;
     private String bio;
 
+    @OneToMany(mappedBy ="applicationUser")
+    private List<PostModel> postModels;
 
-    public ApplicationUser(){
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "following_followers",
+            joinColumns = @JoinColumn(name = "following_id"),
+            inverseJoinColumns = @JoinColumn(name = "followers_id"))
+    List<UserDataModel> following = new ArrayList<>();
+
+
+    @ManyToMany(mappedBy = "following")
+    List<UserDataModel> followers = new ArrayList<>();
+
+    public UserDataModel(){
+
     }
 
-    public ApplicationUser(String username, String password, String firstName, String lastName, String dateOfBirth, String bio) {
+    public UserDataModel(String username, String password, String firstName, String lastName, String dateOfBirth, String bio) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -37,37 +48,16 @@ public class ApplicationUser implements UserDetails {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getUsername() {
         return username;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
     }
 
     public String getPassword() {
@@ -108,5 +98,30 @@ public class ApplicationUser implements UserDetails {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public List<PostModel> getPosts() {
+        return postModels;
+    }
+
+    public void setPosts(List<PostModel> postModels) {
+        this.postModels = postModels;
+
+    }
+
+    public List<UserDataModel> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<UserDataModel> following) {
+        this.following = following;
+    }
+
+    public List<UserDataModel> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<UserDataModel> followers) {
+        this.followers = followers;
     }
 }
