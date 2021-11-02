@@ -73,4 +73,9 @@ public class ApplicationUserController {
 
         return "user.html";
     }
+    @GetMapping("/myprofile")
+    public String profile(Model model){
+      
+        return "profile";
+    }
 }
